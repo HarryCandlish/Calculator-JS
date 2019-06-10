@@ -13,24 +13,107 @@
             <div class="display-item" id="equation"><p id="equation-display">0</p></div>
             <div class="display-item"><p id="outputDisplay">0</p></div>
         </div>
-        <button class="grid-item function" id="clear">AC</button>
-        <button class="grid-item operator" id="divide" value="/">/</button>
-        <button class="grid-item operator" id="multiply" value="*">x</button>
-        <button class="grid-item number" id="seven" value="7">7 </button>
-        <button class="grid-item number" id="eight" value="8">8</button>
-        <button class="grid-item number" id="nine" value="9">9</button>
-        <button class="grid-item operator" id="subtract" value="-">-</button>
-        <button class="grid-item number" id="four" value="4">4</button>
-        <button class="grid-item number" id="five" value="5">5</button>
-        <button class="grid-item number" id="six" value="6">6</button>
-        <button class="grid-item operator" id="add" value="+">+</button>
-        <button class="grid-item number" id="one" value="1">1</button>
-        <button class="grid-item number" id="two" value="2">2</button>
-        <button class="grid-item number" id="three" value="3">3</button>
+        <button class="grid-item function" id="clear" value="0" data='clear'>AC</button>
+        <button class="grid-item operator" id="divide" value="/" data='operator'>/</button>
+        <button class="grid-item operator" id="multiply" value="*" data='operator'>x</button>
+        <button class="grid-item number" id="seven" value="7" data='number'>7 </button>
+        <button class="grid-item number" id="eight" value="8" data='number'>8</button>
+        <button class="grid-item number" id="nine" value="9" data='number'>9</button>
+        <button class="grid-item operator" id="subtract" value="-" data='operator'>-</button>
+        <button class="grid-item number" id="four" value="4" data='number'>4</button>
+        <button class="grid-item number" id="five" value="5" data='number'>5</button>
+        <button class="grid-item number" id="six" value="6" data='number'>6</button>
+        <button class="grid-item operator" id="add" value="+" data='operator'>+</button>
+        <button class="grid-item number" id="one" value="1" data='number'>1</button>
+        <button class="grid-item number" id="two" value="2" data='number'>2</button>
+        <button class="grid-item number" id="three" value="3" data='number'>3</button>
         <button class="grid-item function" id="equals" value="=">=</button>
-        <button class="grid-item number" id="zero" value="0">0</button>
+        <button class="grid-item number" id="zero" value="0" data='number'>0</button>
         <button class="grid-item number" id="decimal" value=".">.</button>
     </div>
-    <script src="Calculator.js"></script>
+    <script type="text/javascript">
+
+
+    var displayEquation = ''
+    var equation = []
+
+
+    var numbersAndOperators = [...document.getElementsByClassName("number"), ...document.getElementsByClassName("operator")]
+    document.getElementById("clear").addEventListener("click", clear)
+
+    for(i = 0; i < numbersAndOperators.length; i++){
+      numbersAndOperators[i].addEventListener("click", updateDisplay)
+    }
+
+    function updateDisplay(event) {
+      var value = {}
+      value['type'] =  event.target.classList[1]
+      value['value'] = event.target.value
+      equation.push( value)
+
+      var outputDisplay = document.getElementById("outputDisplay")
+      displayEquation += event.target.value
+      outputDisplay.innerHTML = displayEquation
+  }
+
+  function clear(){
+    equation = []
+    displayEquation = ''
+    document.getElementById("outputDisplay").innerHTML = 0
+    document.getElementById("equation-display").innerHTML = 0
+    }
+
+  document.getElementById("equals").addEventListener("click", calculate)
+
+function calculate(){
+  var firstNumber = ''
+  var operator = ''
+  var secondNumber = ''
+
+  for (i=0; i < equation.length; i++) {
+
+    if (equation[i].type === 'number') {
+      if (operator === '') {
+        firstNumber += equation[i].value
+      } else {
+        secondNumber += equation[i].value
+      }
+    } else if (equation[i].type === 'operator') {
+      operator = equation[i].value
+    }
+  }
+
+  var calculation;
+
+  if (operator === '+') {
+    calculation = Number(firstNumber) + Number(secondNumber)
+  } else if (operator === '-') {
+    calculation = Number(firstNumber) - Number(secondNumber)
+  } else if (operator === '*') {
+    calculation = Number(firstNumber) * Number(secondNumber)
+  } else if (operator === '/') {
+    calculation = Number(firstNumber) / Number(secondNumber)
+  }
+
+  document.getElementById("equation-display").innerHTML = calculation
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
 </body>
 </html>
